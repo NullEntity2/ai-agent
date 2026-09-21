@@ -1,6 +1,7 @@
 import os
+from openai.types.chat import ChatCompletionToolParam
 
-schema_get_files_info = {
+schema_get_files_info: ChatCompletionToolParam = {
     "type": "function",
     "function": {
         "name": "get_files_info",

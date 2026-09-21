@@ -1,6 +1,32 @@
 import os
 import subprocess
+from openai.types.chat import ChatCompletionToolParam
 from config import *
+
+schema_run_python_file: ChatCompletionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Executes a python script (a file ending in .py)",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to the Python script to execute (relative to working directory). It must end in .py.",
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "Optional arguments to pass to the script"
+                    },
+                    "description": "Optional arguments to pass to the script",
+                },
+            },
+        },
+    },
+}
 
 def run_python_file(
     working_directory: str, file_path: str, args: list[str] | None = None
