@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import argparse
+import prompts
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Chatbot")
@@ -24,6 +25,7 @@ def main() -> None:
     if args.verbose:
         print(f"User prompt: {prompt}")
     messages = [
+        {"role": "system", "content": prompts.system_prompt},
         {"role": "user", "content": prompt}
     ]
     generate_content(client, messages, args.verbose)
@@ -32,6 +34,7 @@ def generate_content(client: OpenAI, messages: list, verbose: bool):
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
+        temperature=0,
     )
 
     if response.usage is None:
