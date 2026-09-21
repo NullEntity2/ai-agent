@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import argparse
 import prompts
-from call_function import available_functions
+from call_function import available_functions, call_function
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Chatbot")
@@ -48,8 +48,9 @@ def generate_content(client: OpenAI, messages: list, verbose: bool):
         for tool_call in message.tool_calls:
             if tool_call.type != "function":
                 continue
-            function_args = json.loads(tool_call.function.arguments or "{}")
-            print(f"Calling function: {tool_call.function.name}({function_args})")
+            result = call_function(tool_call, verbose)
+            if verbose:
+                print(f"-> {result['content']}")
 
     if verbose:
         print(f"Prompt tokens: {response.usage.prompt_tokens}")
